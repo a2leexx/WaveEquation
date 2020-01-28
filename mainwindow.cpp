@@ -21,6 +21,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
+#include <cmath>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -44,8 +45,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 bool MainWindow::border(int x, int y)
 {
-    return x == N - 10;
-
     return (y == 40 && x < N - 10) || (x == N - 11 && y > 40 && y < N - 10);
 }
 
@@ -58,8 +57,8 @@ void MainWindow::calculate()
 
             if (border(x, y)) continue;
 
-            if (x == 20 && y >= 15 + iter && y <= 17 + iter && iter < 20)
-                f = -40;
+            if (x >= 15 && x <= 17 && y >= 15 && y <= 17 && iter < 32)
+                f = std::sin(iter * 0.4) * 40;
             n_u2[x][y] = (k * (GetDUbyDX(2, x, y) + GetDUbyDY(2, x, y)) - f) / p;
         }
 
@@ -160,7 +159,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
                 int c = 128 + 100 * u[x][y] / umax;
                 p.setPen(QPen(QColor(c, c, c), 6));
             }
-            else p.setPen(QPen(QColor(255, 0, 0), 3));
+            else p.setPen(QPen(QColor(255, 0, 0), 6));
             p.drawPoint(x * 6 + 10, y * 6 + 10);
         }
 
